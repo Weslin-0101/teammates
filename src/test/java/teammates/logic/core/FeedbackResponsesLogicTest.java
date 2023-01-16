@@ -1734,5 +1734,30 @@ public class FeedbackResponsesLogicTest extends BaseLogicTest {
                 FeedbackQuestionAttributes question = dataBundle.feedbackQuestions.get("qn2InSession1InCourse1");
 
                 assertFalse(question.isResponseVisibleTo(FeedbackParticipantType.STUDENTS));
+
+                ______TS("success: response is visible to TEAMS");
+
+                question.setGiverType(FeedbackParticipantType.TEAMS);
+
+                assertEquals(question.getGiverType(), FeedbackParticipantType.TEAMS);
+                assertTrue(frLogic.isResponseOfFeedbackQuestionVisibleToStudent(question));
+
+                ______TS("success: response is visible to student");
+
+                question.setGiverType(FeedbackParticipantType.STUDENTS);
+
+                assertTrue(frLogic.isResponseOfFeedbackQuestionVisibleToStudent(question));
+
+                ______TS("failure: response is not visible to OWN_TEAM_MEMBERS");
+
+                question.setGiverType(FeedbackParticipantType.OWN_TEAM_MEMBERS);
+
+                assertTrue(frLogic.isResponseOfFeedbackQuestionVisibleToStudent(question));
+                assertNotEquals(question, FeedbackParticipantType.TEAMS);
+
+                ______TS("return true: response is visible to RECEIVER_TEAM_MEMBERS");
+
+                question.setGiverType(FeedbackParticipantType.RECEIVER_TEAM_MEMBERS);
+                assertTrue(frLogic.isResponseOfFeedbackQuestionVisibleToStudent(question));
         }
 }
